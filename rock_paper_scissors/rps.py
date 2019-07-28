@@ -1,5 +1,7 @@
-# Practicing all kind of stuff that I've learned over the past couple of 
+# Practicing stuff that I've learned over the past couple of 
 # months. I'm sure that the game can be made much more simpler.
+
+# IN PROGRESS!
 
 import random
 import time
@@ -16,9 +18,11 @@ def rules():
 
 
 def player_selection():
+    """Function uses a while loop until the player enters a valid number\
+        between 1-3 and makes a selection"""
     while True:
         try:
-            player_choice = int(input("Do you choose 1. Rock, 2. Paper or 3. Scissors? "))
+            player_choice = int(input("Please choose: 1. Rock, 2. Paper or 3. Scissors? "))
             if 1 <= player_choice <= 3:
                 if player_choice == 1:
                     print("You chose Rock!")
@@ -38,12 +42,13 @@ def player_selection():
 
 
 def computer_selection():
+    """The 'AI' is just a randint method from the random module"""
     computer_choice = random.randint(1, 3)
     print("Computer chooses.")
     time.sleep(1)
     print("Computer chooses..")
     time.sleep(1)
-    print("Computer chooses...")
+    print("Computer chooses... ", end='')
     time.sleep(1)
 
     if computer_choice == 1:
