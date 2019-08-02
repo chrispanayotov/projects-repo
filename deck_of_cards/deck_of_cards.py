@@ -1,5 +1,6 @@
 # Your goal in this exercise is to implement two classes, Card  and Deck .
 from random import shuffle
+import random
 
 class Card:
     """Class creates an unique card with a corresponding suit and value."""
@@ -59,5 +60,32 @@ class Deck:
     def shuffle(self):
         # Returns a list of pseudo-random shuffled deck
         if self.count() < 52:
-            raise ValueError("Only full decks can be shuffled")
+            raise ValueError("Only full decks can be shuffled.")
         return shuffle(self.cards)
+    
+
+    def riffle_shuffle(self):
+        self.shuffle()
+
+        # Randomly splits the deck in two parts (can be even or uneven)
+        mid_point = int(len(self.cards)/2) + random.choice(range(-4, 4))
+        first_half = self.cards[0:mid_point]
+        second_half = self.cards[mid_point:]
+
+        shuffled_deck = []
+        # Performs a "ruffle shuffle"
+        while (len(first_half) > 0 and len(second_half) > 0):
+            if (random.uniform(0, 1) >= len(first_half) / len(second_half) / 2):
+                shuffled_deck.append(second_half.pop(0))
+            else:
+                shuffled_deck.append(first_half.pop(0))
+
+        if (len(first_half)):
+            shuffled_deck += first_half
+        if (len(second_half)):
+            shuffled_deck += second_half
+
+        return shuffled_deck
+
+deck = Deck()
+print(deck.riffle_shuffle())
