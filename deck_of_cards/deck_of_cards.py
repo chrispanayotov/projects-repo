@@ -79,7 +79,9 @@ class Deck:
                 shuffled_deck.append(second_half.pop(0))
             else:
                 shuffled_deck.append(first_half.pop(0))
-
+                
+                
+        # If there are cards left after the ruffle, put them back in the deck
         if (len(first_half)):
             shuffled_deck += first_half
         if (len(second_half)):
