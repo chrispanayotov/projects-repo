@@ -16,5 +16,15 @@ CHIP PC {
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+    Inc16(in=w1, out=incrOut);
+
+    // Increments by 1
+    Mux16(a=w1, b=incrOut, sel=inc, out=w2);
+    // Loads a value based on input
+    Mux16(a=w2, b=in, sel=load, out=w3);
+    // Resets input to 0
+    Mux16(a=w3, b[0..15]=false, sel=reset, out=w4);
+
+    Register(in=w4, load=true, out=out, out=w1);
+
 }
