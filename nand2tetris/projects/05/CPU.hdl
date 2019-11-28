@@ -50,7 +50,7 @@ CHIP CPU {
     DRegister(in=ALUout, load=Dload, out=D);
 
     // A or M register MUX16
-    Mux16(a=A, b=inM, sel=instruction[12], out=AM);  // Maybe selector is not correct, needs additional AND gate
+    Mux16(a=A, b=inM, sel=instruction[12], out=AM);
 
     // Connect the ALU ins[11 10 9 8 7 6]
     // Instructions = 111a c1c2c3c4 c5c6d1d2 d3j1j2j3
