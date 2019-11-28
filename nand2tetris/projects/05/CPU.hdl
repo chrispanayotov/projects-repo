@@ -39,5 +39,44 @@ CHIP CPU {
         pc[15];          // address of next instruction
 
     PARTS:
-    // Put your code here:
+    // Assemble the A-register
+    Not(in=instruction[15], out=ni);
+    Mux16(a=ALUout, b=instruction, sel=ni, out=Ain);
+    Or(a=ni, b=instruction[5], out=Aload);
+    ARegister(in=Ain, load=Aload, out=A, out[0..14]=addressM);
+
+    // Assemble the D-register
+    And(a=instruction[15], b=instruction[4], out=Dload);
+    DRegister(in=ALUout, load=Dload, out=D);
+
+    // A or M register MUX16
+    Mux16(a=A, b=inM, sel=instruction[12], out=AM);  // Maybe selector is not correct, needs additional AND gate
+
+    // Connect the ALU ins[11 10 9 8 7 6]
+    // Instructions = 111a c1c2c3c4 c5c6d1d2 d3j1j2j3
+    ALU(x=D, y=AM, zx=instruction[11], nx=instruction[10], zy=instruction[9], ny=instruction[8], f=instruction[7], no=instruction[6], out=ALUout, out=outM, zr=zr, ng=ng);
+
+    // Connect the zero and negative outputs of the ALU
+    // so it can be connected to the PC chip and CPU can execute conditional jump instructions
+    Not(in=ng, out=pos);
+    Not(in=zr, out=nzr);
+    And(a=instruction[15], b=instruction[0], out=jgt);
+    And(a=pos, b=nzr, out=posnum);
+    And(a=jgt, b=posnum, out=x1);
+
+    And(a=instruction[15], b=instruction[1], out=jeq);
+    And(a=jeq, b=zr, out=x2);
+
+    And(a=instruction[15], b=instruction[2], out=jlt);
+    And(a=jlt, b=ng, out=x3);
+
+    Or(a=x1, b=x2, out=xt);
+    Or(a=x3, b=xt, out=pcLoad);
+
+    // Assemble the writeM output
+    // Instruction[3] = d3
+    And(a=instruction[15], b=instruction[3], out=writeM);
+
+    // Connect the Program Chip
+    PC(in=A, load=pcLoad, inc=true, reset=reset, out[0..14]=pc);
 }
