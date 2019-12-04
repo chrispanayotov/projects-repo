@@ -58,7 +58,7 @@ CHIP CPU {
 
     // Connect the zero and negative outputs of the ALU
     // so it can be connected to the PC chip and CPU can execute conditional jump instructions
-    // Instructions[0, 1, 2] = j3, j2 and j1 instructions 
+    // Instructions[2, 1, 0] = j3, j2 and j1 instructions 
     Not(in=ng, out=pos);
     Not(in=zr, out=nzr);
     And(a=instruction[15], b=instruction[0], out=jgt);
