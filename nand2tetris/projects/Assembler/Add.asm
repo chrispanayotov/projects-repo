@@ -9,5 +9,7 @@
 D=A
 @3
 D=D+A
+@symbol
+D=M
 @0
 M=D

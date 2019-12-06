@@ -15,3 +15,5 @@ The generated code is written into a text file named xxx.hack
 
 Assumption is that the supplied xxx.asm is error-free and there aren't any
 unnecessary lines besides comments and whitespaces.
+
+Used Language: Python v3.6.9
