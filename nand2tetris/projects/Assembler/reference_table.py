@@ -8,7 +8,6 @@
 
 # Dictionary for computation bits c1c2c3c4c5c6, when comp (a=0)
 comp_dict_A0 = {
-
     '0': '101010',
     '1': '111111',
     '-1': '111010',
@@ -31,7 +30,6 @@ comp_dict_A0 = {
 
 # Dictionary for when comp (a=1)
 comp_dict_A1 = {
-
     'M': '110000',
     '!M': '110001',
     '-M': '110011',
@@ -46,8 +44,7 @@ comp_dict_A1 = {
 
 # Dictionary for the destination bits d1d2d3
 dest_dict = {
-
-    'null': '000',
+    None: '000',
     'M': '001',
     'D': '010',
     'MD': '011',
@@ -59,8 +56,7 @@ dest_dict = {
 
 # Dictionary for the jump bits j1j2j3
 jump_dict = {
-
-    'null': '000',
+    None: '000',
     'JGT': '001',
     'JEQ': '010',
     'JGE': '011',

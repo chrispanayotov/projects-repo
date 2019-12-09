@@ -9,7 +9,7 @@
 D=A
 @3
 D=D+A
-@symbol
-D=M
-@0
+@4
+0;JMP
+@5
 M=D

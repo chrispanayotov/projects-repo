@@ -4,19 +4,38 @@
 
 # Examples:
 # Command -> Binary representation
-# @2 -> 
-# D=M ->
-# 0;JMP ->
-
+# @2 -> 0000000000000010
+# D=A -> 1110110000010000
+# 0;JMP -> 1110101010000111
 
 from reference_table import comp_dict_A0, comp_dict_A1, dest_dict, jump_dict
 
 class Translator:
     def __init__(self, dest, comp, jump):
-        self.dest = dest
-        self.comp = comp
-        self.jump = jump
+        self.dest_bits = self.dest_to_bin(dest)
+        self.comp_bits = self.comp_to_bin(comp)
+        self.jump_bits = self.jump_to_bin(jump)
+    
+
+    def dest_to_bin(self, dest_mnemonics):
+        return dest_dict[dest_mnemonics]
+
+
+    def comp_to_bin(self, comp_mnemonics):
+        comp_bits = ''
+
+        if comp_mnemonics in comp_dict_A1.keys():
+            comp_bits += '1' + comp_dict_A1[comp_mnemonics]
+        else:
+            comp_bits += '0' + comp_dict_A0[comp_mnemonics]
+        
+        return comp_bits
+            
+
+    def jump_to_bin(self, jump_mnemonics):
+        return jump_dict[jump_mnemonics]
 
 
 def convert_to_bin(number):
+    # Converts A_COMMAND decimal number to 16-bit binary
     return f'{int(number):016b}'
