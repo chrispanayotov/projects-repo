@@ -8,7 +8,7 @@
 # D=A -> 1110110000010000
 # 0;JMP -> 1110101010000111
 
-from reference_table import comp_dict_A0, comp_dict_A1, dest_dict, jump_dict
+from reference_tables import comp_dict_A0, comp_dict_A1, dest_dict, jump_dict
 
 class Translator:
     def __init__(self, dest, comp, jump):
@@ -25,6 +25,7 @@ class Translator:
         comp_bits = ''
 
         if comp_mnemonics in comp_dict_A1.keys():
+            # Set the a-bit in the comp bits to 1 or 0 depending on the command
             comp_bits += '1' + comp_dict_A1[comp_mnemonics]
         else:
             comp_bits += '0' + comp_dict_A0[comp_mnemonics]
