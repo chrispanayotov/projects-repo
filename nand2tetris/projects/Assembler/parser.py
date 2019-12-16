@@ -30,8 +30,9 @@ class Parser:
         
         return cleaned_assembler_program.strip()
 
-    
+
     def remove_labels(self):
+        # NO SOLUTION FOR NOW
         assembly_program_no_labels = ''
 
         for index, line in enumerate(self.assembly_program.splitlines()):
@@ -80,12 +81,10 @@ class Parser:
 
 
     def is_decimal(self, command):
-        '''Method returns True when the current A_Command is a decimal number.
-        Otherwise, returns False, which means that the command is a symbol and 
-        needs to be added to SymbolTable
+        '''Method returns True when the current A_Command is a decimal number,
+        else returns False, when the command is a symbol.
         Should only be called if self.command_type() is A_COMMAND.'''
 
-        # Check if the A_COMMAND is a symbol or decimal and return num or label.
         try:
             int(command[1:])
             return True
