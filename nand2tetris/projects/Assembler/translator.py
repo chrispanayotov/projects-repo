@@ -1,12 +1,14 @@
 # Module translates HACK assembly language mnemonics passed by the parser
 # and translates them into binary code.
 # Translator contains 3 methods - comp(7bits), dest(3bits) and jump(3bits).
+# Module also has a side-function convert_to_bin, because I think this is the 
+# best place for it.
 
 # Examples:
-# Command -> Binary representation
-# @2 -> 0000000000000010
-# D=A -> 1110110000010000
-# 0;JMP -> 1110101010000111
+# Command -> Binary representation:
+    # @2 -> 0000000000000010
+    # D=A -> 1110110000010000
+    # 0;JMP -> 1110101010000111
 
 from reference_tables import comp_dict_A0, comp_dict_A1, dest_dict, jump_dict
 
