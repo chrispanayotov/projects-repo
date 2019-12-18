@@ -4,13 +4,13 @@
 # to the command's components (fields and symbols)
 # Also, it detects and removes whitespaces and comments
 
-from shutil import copyfile
+import os
 
 class Parser:
     def __init__(self, source_file: str):
         self.source_file = source_file              # Loads the source file
         self.assembly_program = self.open_file()   # Removes comments and whitespaces
-        self.assembly_program_len = len(self.assembly_program.split('\n'))   # Gets lenght of program
+        self.assembly_program_len = self.get_program_length()  # Gets lenght of program
 
     line_counter = 0
 
@@ -18,32 +18,42 @@ class Parser:
     def open_file(self):
         '''Method removes whitespaces and comments of the provided 
         assembler source file. Returns a string to self.assembly_program'''
+        cleaned_assembler_program = ''
 
-        with open(self.source_file, 'r') as f:
-            cleaned_assembler_program = ''
+        try:
+            with open(self.source_file, 'r') as f:
 
-            for line in f:
-                if line.startswith('//'):
-                    pass
-                else:
-                    cleaned_assembler_program += line
-        
+                for line in f:
+                    if line.startswith('//'):
+                        pass
+                    else:
+                        cleaned_assembler_program += line
+
+        except FileNotFoundError as f:
+            print(f)
+
         return cleaned_assembler_program.strip()
 
-
     def remove_labels(self):
+        '''Method removes (XXX) labels from the assembly program.
+        Returns string'''
+
         self.assembly_program = self.assembly_program.splitlines()
         labels_removed = ''
 
         for index, line in enumerate(self.assembly_program):
             if line.startswith('('):
                 del self.assembly_program[index]
-            labels_removed += line + '\n'
+                self.assembly_program_len -= 1
 
-        # for line in self.assembly_program:
+        for line in self.assembly_program:
             labels_removed += line + '\n'
             
         return labels_removed.strip()
+
+    
+    def get_program_length(self):
+        return len(self.assembly_program.split('\n'))
                     
     
     def is_parsed(self):
@@ -88,7 +98,7 @@ class Parser:
         Should only be called if self.command_type() is A_COMMAND.'''
 
         try:
-            int(command[1:])
+            int(command)
             return True
         except:
             return False
@@ -118,9 +128,3 @@ class Parser:
 
         if ';' in command:
             return command.split(';')[1]
-
-
-    # def create_file(self, open_file):
-    #     '''Method creates a new file with comments and whitespaces removed'''
-    #     with open('/home/uriel/projects-repo/nand2tetris/projects/Assembler/Clean.asm', 'w') as f:
-    #         return f.write(open_file)
