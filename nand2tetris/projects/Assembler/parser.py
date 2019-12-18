@@ -32,17 +32,19 @@ class Parser:
 
 
     def remove_labels(self):
-        # NO SOLUTION FOR NOW
-        assembly_program_no_labels = ''
+        self.assembly_program = self.assembly_program.splitlines()
+        labels_removed = ''
 
-        for index, line in enumerate(self.assembly_program.splitlines()):
+        for index, line in enumerate(self.assembly_program):
             if line.startswith('('):
-                print(index)
-                del self.assembly_program.splitlines()[index]
-                
-        
-        print(self.assembly_program.splitlines())
+                del self.assembly_program[index]
+            labels_removed += line + '\n'
 
+        # for line in self.assembly_program:
+            labels_removed += line + '\n'
+            
+        return labels_removed.strip()
+                    
     
     def is_parsed(self):
         '''Method stores the number of lines of the assembly program.

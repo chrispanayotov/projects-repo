@@ -11,9 +11,8 @@ assembly_program = Parser('/home/uriel/projects-repo/nand2tetris/projects/Assemb
 # Create the SymbolTable and add the built-ins
 symbol_table = SymbolTable()
 
-
 # Do a first run of the assembly program.
-# Goal is to scan the progam for LABELS and them to symbol table
+# Scans the progam for LABELS and add them to symbol table
 while not assembly_program.is_parsed():
     current_command = assembly_program.advance()
     command_type = assembly_program.command_type(current_command)
@@ -26,13 +25,13 @@ while not assembly_program.is_parsed():
             symbol_table.add_entry(label, assembly_program.line_counter)
 
 # After the first run is complete removes all (XXX) labels from assembly program 
-# and start from the beginning of program:
-assembly_program.remove_labels()
+# and start from the beginning of program
+assembly_program.assembly_program = assembly_program.remove_labels()
 assembly_program.line_counter = 0
 
 
 # Do a second run of the assembly program.
-# Goal is to add all @symbols to symbol table, with a corresponding address starting from 16
+# Adds all @symbols to symbol table, with a corresponding address starting from 16
 # Also generates all A and C-command mnemonics and binaries
 while not assembly_program.is_parsed():   
     current_command = assembly_program.advance()
