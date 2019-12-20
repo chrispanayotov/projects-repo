@@ -3,14 +3,13 @@
 # Reads an assembly language command, parses it and provides convenient access 
 # to the command's components (fields and symbols)
 # Also, it detects and removes whitespaces and comments
-
-import os
+import sys
 
 class Parser:
     def __init__(self, source_file: str):
         self.source_file = source_file              # Loads the source file
-        self.assembly_program = self.open_file()   # Removes comments and whitespaces
-        self.assembly_program_len = self.get_program_length()  # Gets lenght of program
+        self.assembly_program = self.open_file()  
+        self.assembly_program_len = self.get_program_length() 
 
     line_counter = 0
 
@@ -18,21 +17,22 @@ class Parser:
     def open_file(self):
         '''Method removes whitespaces and comments of the provided 
         assembler source file. Returns a string to self.assembly_program'''
-        cleaned_assembler_program = ''
 
+        cleaned_assembler_program = ''
         try:
             with open(self.source_file, 'r') as f:
-
                 for line in f:
                     if line.startswith('//'):
                         pass
                     else:
-                        cleaned_assembler_program += line
+                        cleaned_assembler_program += line.strip() + '\n'
 
-        except FileNotFoundError as f:
-            print(f)
+        except FileNotFoundError as error:
+            print(error)
+            sys.exit(0)
 
         return cleaned_assembler_program.strip()
+
 
     def remove_labels(self):
         '''Method removes (XXX) labels from the assembly program.
