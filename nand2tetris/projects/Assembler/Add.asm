@@ -11,5 +11,9 @@ D=A
 D=D+A
 @4
 0;JMP
+(LOOP)
+@address
+A=D
+M=-1
 @5
 M=D
