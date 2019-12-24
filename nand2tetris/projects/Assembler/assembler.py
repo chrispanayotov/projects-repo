@@ -87,9 +87,18 @@ while not assembly_program.is_parsed():
         
         translated_program.append(c_command_bin)
 
-output_file = source_file
+
+# Get the name of the source file and create a new path leading to a source_file_name.hack file
+output_file_name = source_file.split('/')[-1].split('.')[0]
+output_file_list = source_file.split('/')
+output_file_list[-1] = output_file_name + '.hack'
+
+output_file_path = ''
+
+for line in output_file_list:
+    output_file_path += '/' + line
 
 # Create a .hack file with the translated to machine code assembler program
-with open('/home/uriel/projects-repo/nand2tetris/projects/Assembler/Add.hack', 'w') as f:
+with open(output_file_path, 'w') as f:
     for line in translated_program:
         f.write(line + '\n')
