@@ -43,15 +43,18 @@ class Parser:
 
         self.assembly_program = self.assembly_program.splitlines()
         labels_removed = ''
+        counter = 0
 
+        
         for index, line in enumerate(self.assembly_program):
             if line.startswith('('):
                 del self.assembly_program[index]
-                self.assembly_program_len -= 1
+                counter += 1
 
         for line in self.assembly_program:
             labels_removed += line + '\n'
             
+        self.assembly_program_len -= counter
         return labels_removed.strip()
 
     
@@ -122,8 +125,10 @@ class Parser:
         if ';' in command:
             return command.split(';')[0]
         else:
-            return command.split('=')[1]
-
+            try:
+                return command.split('=')[1]
+            except:
+                print(command)
 
     def jump_mnemonics(self, command):
         '''Returns the jump mnemonic (string) in the current C-command (8 possibilities)

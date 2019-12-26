@@ -1,0 +1,6 @@
+@95
+0;JMP
+(RET_ADDRESS_CALL0)
+(ball.new)
+@15
+D=A
