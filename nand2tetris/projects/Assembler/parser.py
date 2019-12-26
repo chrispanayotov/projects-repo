@@ -1,9 +1,11 @@
 # Goal of the parser is to break each assembly command (A or C CPU-instruction)
 # into its underlying components.
 # Reads an assembly language command, parses it and provides convenient access 
-# to the command's components (fields and symbols)
+# to the command's components (fields and symbols).
 # Also, it detects and removes whitespaces and comments
+
 import sys
+
 
 class Parser:
     def __init__(self, source_file: str):
@@ -16,9 +18,10 @@ class Parser:
     
     def open_file(self):
         '''Method removes whitespaces and comments of the provided 
-        assembler source file. Returns a string to self.assembly_program'''
+        assembler source file. Returns a string'''
 
         cleaned_assembler_program = ''
+
         try:
             with open(self.source_file, 'r') as f:
                 for line in f:
@@ -93,7 +96,7 @@ class Parser:
 
 
     def is_decimal(self, command):
-        '''Method returns True when the current A_Command is a decimal number,
+        '''Method returns True when the current A_COMMAND is a decimal number,
         else returns False, when the command is a symbol.
         Should only be called if self.command_type() is A_COMMAND.'''
 
