@@ -9,21 +9,21 @@ import sys
 
 class Parser:
     def __init__(self, source_file: str):
-        self.source_file = source_file              # Loads the source file
-        self.assembly_program = self.open_file()  
+        # self.source_file = source_file              # Loads the source file
+        self.assembly_program = self.open_file(source_file)
         self.assembly_program_len = self.get_program_length() 
 
     line_counter = 0
 
     
-    def open_file(self):
+    def open_file(self, file):
         '''Method removes whitespaces and comments of the provided 
         assembler source file. Returns a string'''
 
         cleaned_assembler_program = ''
 
         try:
-            with open(self.source_file, 'r') as f:
+            with open(file, 'r') as f:
                 for line in f:
                     if line.startswith('//'):
                         pass
@@ -45,7 +45,6 @@ class Parser:
         labels_removed = ''
         counter = 0
 
-        
         for index, line in enumerate(self.assembly_program):
             if line.startswith('('):
                 del self.assembly_program[index]
@@ -84,7 +83,7 @@ class Parser:
         return current_command
 
     
-    def command_type(self, command):
+    def get_command_type(self, command):
         '''Method returns the type of the current CPU command:
             A_COMMAND - for @xxx where xxx is either a symbol or a decimal number;
             C_COMMAND - for dest=comp;jump;
@@ -110,7 +109,7 @@ class Parser:
             return False
         
 
-    def dest_mnemonics(self, command):
+    def get_dest_mnemonics(self, command):
         '''Returns the dest mnemonic (string) in the current C-command (8 possibilities).
         Should be called only when command_type() is C_COMMAND'''
 
@@ -118,7 +117,7 @@ class Parser:
             return command.split('=')[0]
 
 
-    def comp_mnemonics(self, command):
+    def get_comp_mnemonics(self, command):
         '''Returns the comp mnemonic (string) in the current C-command (28 possibilities).
         Should be called only when self.command_type() is C_COMMAND'''
 
@@ -130,7 +129,7 @@ class Parser:
             except:
                 print(command)
 
-    def jump_mnemonics(self, command):
+    def get_jump_mnemonics(self, command):
         '''Returns the jump mnemonic (string) in the current C-command (8 possibilities)
         Should be called only when self.command_type() is C_COMMAND'''
 

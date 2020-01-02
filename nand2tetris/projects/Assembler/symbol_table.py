@@ -21,11 +21,12 @@ class SymbolTable:
         '''Method searches for a free address spot in the RAM and 
         adds the pair (symbol, address) to the table'''
 
-        if not self.contains_symbol(symbol):
-            while self.contains_address(self.variable_address):
-                self.variable_address += 1
+        while self.contains_address(self.variable_address):
+            if self.variable_address >= 16384:
+                self.variable_address = 24576
+            self.variable_address += 1
 
-            self.add_label(symbol, self.variable_address)
+        self.add_label(symbol, self.variable_address)
 
 
     def contains_symbol(self, symbol: str):

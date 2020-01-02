@@ -1,6 +1,9 @@
+import time
 from parser import Parser
 from symbol_table import SymbolTable
 from translator import Translator, convert_to_bin
+
+start_time = time.time()
 
 # Opens and cleans the source assembly program.
 # Exits the program if an invalid path to a file is provided.
@@ -15,7 +18,7 @@ symbol_table = SymbolTable()
 # Scan for (XXX) labels and add them to symbol_table
 while not assembly_program.is_parsed():
     current_command = assembly_program.advance()
-    command_type = assembly_program.command_type(current_command)
+    command_type = assembly_program.get_command_type(current_command)
     
     if command_type == 'L_COMMAND':
         label_name = current_command[1:len(current_command)-1]
@@ -33,7 +36,7 @@ assembly_program.line_counter = 0
 # Generates all A and C-command mnemonics and binaries
 while not assembly_program.is_parsed():
     current_command = assembly_program.advance()
-    command_type = assembly_program.command_type(current_command)
+    command_type = assembly_program.get_command_type(current_command)
 
     if command_type == 'A_COMMAND':
         symbol = current_command[1:]
@@ -43,14 +46,14 @@ while not assembly_program.is_parsed():
 
         if is_decimal:
             translated_program.append(convert_to_bin(symbol))
-        else:
+        elif not symbol_table.contains_symbol(symbol):
             symbol_table.add_symbol(symbol)
-                
             translated_program.append(convert_to_bin(symbol_table.get_address(symbol)))
+
     else:   # It's a C_COMMAND
-        dest_mnemonics = assembly_program.dest_mnemonics(current_command)
-        comp_mnemonics = assembly_program.comp_mnemonics(current_command)
-        jump_mnemonics = assembly_program.jump_mnemonics(current_command)
+        dest_mnemonics = assembly_program.get_dest_mnemonics(current_command)
+        comp_mnemonics = assembly_program.get_comp_mnemonics(current_command)
+        jump_mnemonics = assembly_program.get_jump_mnemonics(current_command)
 
         # Generate a Translator object, 
         # which contains the converted command mnemonics to bits
@@ -60,19 +63,27 @@ while not assembly_program.is_parsed():
                         mnemonics_to_bin.dest_bits + mnemonics_to_bin.jump_bits
         
         translated_program.append(c_command_bin)
+
+
+def get_output_file_path(source_file):    
+    # Function gets the name and path of the source file
+    output_file_name = source_file.split('/')[-1].split('.')[0]
+    output_file_list = source_file.split('/')
+    output_file_list[-1] = output_file_name + '.hack'
+    output_file_path = ''
+
+    for line in output_file_list:
+        output_file_path += '/' + line
     
-# Get the name of the source file and 
-# create a new path leading to a source_file_name.hack file
-output_file_name = source_file.split('/')[-1].split('.')[0]
-output_file_list = source_file.split('/')
-output_file_list[-1] = output_file_name + '.hack'
+    return output_file_path
 
-output_file_path = ''
-
-for line in output_file_list:
-    output_file_path += '/' + line
-
+def create_output_file(path_name):
 # Create a .hack file with the translated to machine code assembler program
-with open(output_file_path, 'w') as f:
-    for line in translated_program:
-        f.write(line + '\n')
+    with open(path_name, 'w') as f:
+        for line in translated_program:
+            f.write(line + '\n')
+
+output = get_output_file_path(source_file)
+create_output_file(output)
+
+print(f'Assembly program successfuly parsed in {time.time() - start_time:.2f} seconds')
