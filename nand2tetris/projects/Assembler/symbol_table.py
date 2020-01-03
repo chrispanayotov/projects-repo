@@ -22,7 +22,7 @@ class SymbolTable:
         adds the pair (symbol, address) to the table'''
 
         while self.contains_address(self.variable_address):
-            if self.variable_address >= 16384:
+            if self.variable_address == 16384:
                 self.variable_address = 24576
             self.variable_address += 1
 

@@ -14,6 +14,7 @@ translated_program = []
 # Create the SymbolTable and add the built-in symbols
 symbol_table = SymbolTable()
 
+
 # Do a first run of the assembly program.
 # Scan for (XXX) labels and add them to symbol_table
 while not assembly_program.is_parsed():
@@ -26,9 +27,11 @@ while not assembly_program.is_parsed():
         if not symbol_table.contains_symbol(label_name): 
             symbol_table.add_label(label_name, assembly_program.line_counter)
 
+
 # Removes all labels from assembly program and restarts it
 assembly_program.assembly_program = assembly_program.remove_labels()
 assembly_program.line_counter = 0
+
 
 # Do a second run of the assembly program
 # Adds all @symbols to symbol table, with a corresponding address starting from 16
@@ -42,12 +45,12 @@ while not assembly_program.is_parsed():
         symbol = current_command[1:]
 
         # Check if the A_COMMAND is a decimal number or a @symbol (variable)
-        is_decimal = assembly_program.is_decimal(symbol)
-
-        if is_decimal:
+        if assembly_program.is_decimal(symbol):
             translated_program.append(convert_to_bin(symbol))
         elif not symbol_table.contains_symbol(symbol):
             symbol_table.add_symbol(symbol)
+            translated_program.append(convert_to_bin(symbol_table.get_address(symbol)))
+        else:
             translated_program.append(convert_to_bin(symbol_table.get_address(symbol)))
 
     else:   # It's a C_COMMAND
@@ -69,7 +72,7 @@ def get_output_file_path(source_file):
     # Function gets the name and path of the source file
     output_file_name = source_file.split('/')[-1].split('.')[0]
     output_file_list = source_file.split('/')
-    output_file_list[-1] = output_file_name + '.hack'
+    output_file_list[-1] = output_file_name + '_python.hack'
     output_file_path = ''
 
     for line in output_file_list:
@@ -77,11 +80,13 @@ def get_output_file_path(source_file):
     
     return output_file_path
 
+
 def create_output_file(path_name):
 # Create a .hack file with the translated to machine code assembler program
     with open(path_name, 'w') as f:
         for line in translated_program:
             f.write(line + '\n')
+
 
 output = get_output_file_path(source_file)
 create_output_file(output)

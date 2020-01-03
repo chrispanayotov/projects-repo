@@ -9,7 +9,6 @@ import sys
 
 class Parser:
     def __init__(self, source_file: str):
-        # self.source_file = source_file              # Loads the source file
         self.assembly_program = self.open_file(source_file)
         self.assembly_program_len = self.get_program_length() 
 
@@ -18,7 +17,8 @@ class Parser:
     
     def open_file(self, file):
         '''Method removes whitespaces and comments of the provided 
-        assembler source file. Returns a string'''
+        assembler source file. If the file doesn't exist, exits the program.
+        Returns a string'''
 
         cleaned_assembler_program = ''
 
@@ -29,31 +29,24 @@ class Parser:
                         pass
                     else:
                         cleaned_assembler_program += line.strip() + '\n'
-
         except FileNotFoundError as error:
             print(error)
             sys.exit(0)
 
         return cleaned_assembler_program.strip()
 
-
+    
     def remove_labels(self):
         '''Method removes (XXX) labels from the assembly program.
         Returns string'''
-
-        self.assembly_program = self.assembly_program.splitlines()
         labels_removed = ''
-        counter = 0
+        labels_removed_list = [line for line in self.assembly_program.splitlines() if not line.startswith('(')]
 
-        for index, line in enumerate(self.assembly_program):
-            if line.startswith('('):
-                del self.assembly_program[index]
-                counter += 1
-
-        for line in self.assembly_program:
+        for line in labels_removed_list:
             labels_removed += line + '\n'
-            
-        self.assembly_program_len -= counter
+
+        self.assembly_program_len = len(labels_removed_list)
+
         return labels_removed.strip()
 
     
@@ -75,7 +68,7 @@ class Parser:
         if self.line_counter >= self.assembly_program_len:
             self.is_parsed()
 
-        # Select command
+        # Select current command
         current_command = self.assembly_program.splitlines()[self.line_counter]
         # Advance to next command
         self.line_counter += 1
@@ -124,10 +117,7 @@ class Parser:
         if ';' in command:
             return command.split(';')[0]
         else:
-            try:
-                return command.split('=')[1]
-            except:
-                print(command)
+            return command.split('=')[1]
 
     def get_jump_mnemonics(self, command):
         '''Returns the jump mnemonic (string) in the current C-command (8 possibilities)
